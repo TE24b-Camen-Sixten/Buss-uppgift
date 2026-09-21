@@ -15,7 +15,8 @@ static void Meny(long[] platser) {
         case "1" -> Boka(platser);
         case "2" -> Inehåll(platser);
         case "3" -> Omsättning(platser);
-        case "4" -> tras = 1 / 0;
+        case "4" -> Avboka(platser);
+        case "5" -> tras = 1 / 0;
         default -> IO.println("du är korkad");
     }
 }
@@ -25,8 +26,8 @@ static void Boka(long[] platser) {
     int platsInt = Integer.parseInt(platsString) - 1; // Fixar så det inte är sämst senare
 
     if (platser[platsInt] == 0) {
-        platser[platsInt] = 1;
         long personNr = Perosnummer();
+        platser[platsInt] = personNr;
         IO.println("Nu är plats " + (platsInt + 1) + " bokad");
     } else {
         IO.println("Den platsen är upptagen");
@@ -35,7 +36,12 @@ static void Boka(long[] platser) {
 
 static void Inehåll(long[] platser) {
     for (long plats : platser) {
-        IO.print(plats + " ");
+        if (plats == 0){
+            IO.print("Ledig");
+        }
+        else{
+            IO.print("Bokad");
+        }
     }
     IO.println();
 }
@@ -47,15 +53,14 @@ static void Omsättning(long[] platser) {
             omsättning += 300;
         }
     }
-    IO.println(omsättning);
+    IO.println("Du har omsatt: " + omsättning + "kr");
 }
 
 static long Perosnummer(){
     boolean fel = true;
     long pNum = 0;
     while (fel){
-        pNum = StringToLong("Skriv in ditt perosnummer (ÅÅÅÅMMDDXXXX): ");
-        float pNumCheck = (pNum / 1000000000000L);
+        pNum = StringTillLong("Skriv in ditt perosnummer (ÅÅÅÅMMDDXXXX): ");
         if (pNum > 100000000000L && pNum < 999999999999L){
             fel = false;
         }
@@ -66,7 +71,7 @@ static long Perosnummer(){
     return pNum;
 }
 
-static long StringToLong(String prompt){
+static long StringTillLong(String prompt){
     boolean fel = true;
     long ut = 0L;
 
@@ -81,4 +86,14 @@ static long StringToLong(String prompt){
     }
     
     return ut;
+
+static void Avboka(long [] platser){
+    boolean fel = true;
+    while (fel) {
+        long plats = StringTillLong("Vilken plats vill du avboka? (1-20): "); // Måste vara lång för att funka med StringTillLong()
+        if (plats >= 1 && plats <= 20){
+            platser[(int)plats - 1] = 0;
+        }
+    }
+    
 }
